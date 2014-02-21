@@ -12,7 +12,7 @@
     <releaseNotes>Changed namespace.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>Expression Linq Unwrap</tags>
-    <refrences>
+    <references>
       <reference file="Wax.dll" />
     </references>
   </metadata>
