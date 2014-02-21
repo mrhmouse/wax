@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Wax</id>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <authors>mrhmouse</authors>
     <owners>mrhmouse</owners>
     <licenseUrl>http://mit-license.org</licenseUrl>
@@ -12,8 +12,8 @@
     <releaseNotes>Changed namespace.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>Expression Linq Unwrap</tags>
-    <references>
-      <reference file="Wax.dll" />
-    </references>
   </metadata>
+  <files>
+    <file target="lib/net45" src="Wax.dll" />
+  </files>
 </package>
