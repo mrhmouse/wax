@@ -12,8 +12,8 @@
     <releaseNotes>Changed namespace.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>Expression Linq Unwrap</tags>
-    <dependencies>
-      <dependency id="Wax" version="0.2.0" />
-    </dependencies>
+    <refrences>
+      <reference file="Wax.dll" />
+    </references>
   </metadata>
 </package>
