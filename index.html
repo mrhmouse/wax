@@ -1,50 +1,62 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Wax by mrhmouse</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
     <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
+    <title>Wax by mrhmouse</title>
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/mrhmouse/wax">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/mrhmouse/wax/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/mrhmouse/wax/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <div id="container">
+      <div class="inner">
 
-    <div class="wrapper">
-
-      <section>
-        <div id="title">
+        <header>
           <h1>Wax</h1>
-          <p>A .NET library of useful functions for manipulating expression trees.</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/mrhmouse">mrhmouse</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
+          <h2>Designed to aid in the reuse of Expression trees.</h2>
+        </header>
 
-        <h1>
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/mrhmouse/wax/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/mrhmouse/wax/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/mrhmouse/wax" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
 <a name="wax" class="anchor" href="#wax"><span class="octicon octicon-link"></span></a>Wax</h1>
 
 <p>Wax grew out of my frustration with Linq-to-SQL's inability to handle <code>InvocationExpression</code>s,
 so its main purpose is to allow common expressions to be saved and re-used instead of repeated
 verbatim each time. Wax also contains a few other functions that I found useful when
 working with expressions.</p>
+
+<h1>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<p>To install Wax, run</p>
+
+<pre><code>Install-Package Wax
+</code></pre>
+
+<p>in your NuGet package manager console, or download the source and compile with</p>
+
+<div class="highlight highlight-sh"><pre><span class="c"># Assuming Mono's C# compiler</span>
+mcs -o+ -t:library -out:Wax.dll *.cs
+</pre></div>
+
+<p>Then, in your code,</p>
+
+<div class="highlight highlight-csharp"><pre><span class="k">using</span> <span class="nn">ExpressionKit</span><span class="p">;</span>
+</pre></div>
 
 <h1>
 <a name="the-functions" class="anchor" href="#the-functions"><span class="octicon octicon-link"></span></a>The Functions</h1>
@@ -66,6 +78,7 @@ but I may extend these to the full length offered by <code>Func&lt;T...&gt;</cod
 <div class="highlight highlight-csharp"><pre><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Linq.Expressions</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">ExpressionKit</span><span class="p">;</span>
 
 <span class="k">static</span> <span class="k">class</span> <span class="nc">MyProgram</span>
 <span class="p">{</span>
@@ -94,6 +107,7 @@ Using <code>UnwrappedWhere</code>, our above example becomes:</p>
 <div class="highlight highlight-csharp"><pre><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Linq.Expressions</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">ExpressionKit</span><span class="p">;</span>
 
 <span class="k">static</span> <span class="k">class</span> <span class="nc">MyProgram</span>
 <span class="p">{</span>
@@ -132,10 +146,15 @@ but they are provided as extension methods, which I find easier to read.</p>
 
 <p>This function doesn't do much by itself; it's only used to flag which expressions to
 <code>Unwrap</code>. When actually evaluated, it will throw an <code>InvalidOperationException</code>.</p>
-      </section>
+        </section>
 
+        <footer>
+          Wax is maintained by <a href="https://github.com/mrhmouse">mrhmouse</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
   </body>
 </html>
