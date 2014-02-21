@@ -6,6 +6,28 @@ so its main purpose is to allow common expressions to be saved and re-used inste
 verbatim each time. Wax also contains a few other functions that I found useful when
 working with expressions.
 
+Installation
+============
+
+To install Wax, run
+
+```
+Install-Package Wax
+```
+
+in your NuGet package manager console, or download the source and compile with
+
+```sh
+# Assuming Mono's C# compiler
+mcs -o+ -t:library -out:Wax.dll *.cs
+```
+
+Then, in your code,
+
+```csharp
+using ExpressionKit;
+```
+
 The Functions
 =============
 
@@ -27,6 +49,7 @@ Example:
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using ExpressionKit;
 
 static class MyProgram
 {
