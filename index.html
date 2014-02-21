@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Wax by mrhmouse</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/mrhmouse/wax">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/mrhmouse/wax/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/mrhmouse/wax/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Wax</h1>
+          <p>A .NET library of useful functions for manipulating expression trees.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/mrhmouse">mrhmouse</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="wax" class="anchor" href="#wax"><span class="octicon octicon-link"></span></a>Wax</h1>
+
+<p>Wax grew out of my frustration with Linq-to-SQL's inability to handle <code>InvocationExpression</code>s,
+so its main purpose is to allow common expressions to be saved and re-used instead of repeated
+verbatim each time. Wax also contains a few other functions that I found useful when
+working with expressions.</p>
+
+<h1>
+<a name="the-functions" class="anchor" href="#the-functions"><span class="octicon octicon-link"></span></a>The Functions</h1>
+
+<h2>
+<a name="unwrap" class="anchor" href="#unwrap"><span class="octicon octicon-link"></span></a>Unwrap</h2>
+
+<p>This is the heart of Wax. It's used to unwrap other expressions into their definitions for you,
+so that Linq-to-SQL (or perhaps other frameworks that expect simple expressions) can digest them.</p>
+
+<p>There are two variations of <code>Unwrap</code>: one for functions receiving a single argument,
+and another for functions receiving two arguments. In practice, I haven't needed more than this,
+but I may extend these to the full length offered by <code>Func&lt;T...&gt;</code> in the future.</p>
+
+<p>Expressions are marked for unwrapping using <code>Expand</code>, which also has two variants.</p>
+
+<p>Example:</p>
+
+<div class="highlight highlight-csharp"><pre><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq.Expressions</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="k">class</span> <span class="nc">MyProgram</span>
+<span class="p">{</span>
+  <span class="k">static</span> <span class="n">Expression</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">MyModel</span><span class="p">,</span> <span class="n">IQueryable</span><span class="p">&lt;</span><span class="n">MyProperty</span><span class="p">&gt;&gt;&gt;</span>
+    <span class="n">ModelProperties</span> <span class="p">=</span> <span class="cm">/* some complex selection */</span><span class="p">;</span>
+
+  <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
+  <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">red</span> <span class="p">=</span> <span class="n">MyContext</span><span class="p">.</span><span class="n">MyModels</span><span class="p">.</span><span class="n">Where</span><span class="p">(</span><span class="n">Wax</span><span class="p">.</span><span class="n">Unwrap</span><span class="p">&lt;</span><span class="n">MyModel</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;(</span><span class="n">m</span> <span class="p">=&gt;</span> <span class="n">ModelProperties</span>
+      <span class="p">.</span><span class="n">Expand</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+      <span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">p</span><span class="p">.</span><span class="n">Color</span> <span class="p">==</span> <span class="n">Colors</span><span class="p">.</span><span class="n">Red</span><span class="p">)));</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Of course, having to explicitly state the type parameters for <code>Unwrap</code> every time can be irritating, and
+it is impossible when one of the type parameters refers to an anonymous type.
+Which is why Wax also provides...</p>
+
+<h2>
+<a name="unwrappedwhere" class="anchor" href="#unwrappedwhere"><span class="octicon octicon-link"></span></a>UnwrappedWhere</h2>
+
+<p>This function is just Linq's <code>Where</code> combined with <code>Unwrap</code> to give you the convenience of type inference.
+Using <code>UnwrappedWhere</code>, our above example becomes:</p>
+
+<div class="highlight highlight-csharp"><pre><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq.Expressions</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="k">class</span> <span class="nc">MyProgram</span>
+<span class="p">{</span>
+  <span class="k">static</span> <span class="n">Expression</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">MyModel</span><span class="p">,</span> <span class="n">IQueryable</span><span class="p">&lt;</span><span class="n">MyProperty</span><span class="p">&gt;&gt;&gt;</span>
+    <span class="n">ModelProperties</span> <span class="p">=</span> <span class="cm">/* some complex selection */</span><span class="p">;</span>
+
+  <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
+  <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">red</span> <span class="p">=</span> <span class="n">MyContext</span><span class="p">.</span><span class="n">MyModels</span><span class="p">.</span><span class="n">UnwrappedWhere</span><span class="p">(</span><span class="n">m</span> <span class="p">=&gt;</span> <span class="n">ModelProperties</span>
+      <span class="p">.</span><span class="n">Expand</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+      <span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">p</span><span class="p">.</span><span class="n">Color</span> <span class="p">==</span> <span class="n">Colors</span><span class="p">.</span><span class="n">Red</span><span class="p">)));</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="unwrappedselect" class="anchor" href="#unwrappedselect"><span class="octicon octicon-link"></span></a>UnwrappedSelect</h2>
+
+<p>This function is similar to <code>UnwrappedWhere</code>. You can probably guess what it does.</p>
+
+<h2>
+<a name="or-and-inverse" class="anchor" href="#or-and-inverse"><span class="octicon octicon-link"></span></a>Or, And, Inverse</h2>
+
+<p>These three functions provide basic boolean logic for working with expressions.
+Their functionality doesn't extend far beyond what's offerred by <code>Expression</code>,
+but they are provided as extension methods, which I find easier to read.</p>
+
+<h2>
+<a name="any-all" class="anchor" href="#any-all"><span class="octicon octicon-link"></span></a>Any, All</h2>
+
+<p>These two functions are just shorthand for combining lists of expressions with
+<code>Or</code> or <code>And</code>, respectively.</p>
+
+<h2>
+<a name="expand" class="anchor" href="#expand"><span class="octicon octicon-link"></span></a>Expand</h2>
+
+<p>This function doesn't do much by itself; it's only used to flag which expressions to
+<code>Unwrap</code>. When actually evaluated, it will throw an <code>InvalidOperationException</code>.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
