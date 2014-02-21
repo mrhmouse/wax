@@ -26,8 +26,7 @@ namespace ExpressionKit
     /// </returns>
     /// <remarks>
     /// When used in an expression, this call can be unwrapped.
-    /// When used outside of an expression, this call takes
-    /// place immediately.
+    /// This method should not be used outside of an unwrapped expression.
     /// </remarks>
     [UnwrappableMethodAttribute]
     public static TResult Expand<TParameter, TResult>(
@@ -63,8 +62,7 @@ namespace ExpressionKit
     /// </returns>
     /// <remarks>
     /// When used in an expression, this call can be unwrapped.
-    /// When used outside of an expression, this call takes
-    /// place immediately.
+    /// This method should not be used outside of an unwrapped expression.
     /// </remarks>
     [UnwrappableMethodAttribute]
     public static TResult Expand<TParam1, TParam2, TResult>(
@@ -76,9 +74,8 @@ namespace ExpressionKit
     }
 
     /// <summary>
-    /// Unwraps any <see cref="MethodCallExpression"/>
-    /// expressions that have <see cref="UnwrappableMethodAttribute"/>
-    /// applied to them.
+    /// Unwraps any <see cref="Expand"/> calls
+    /// within the given expression.
     /// </summary>
     /// <typeparam name="TParam">
     /// The first parameter type.
@@ -119,6 +116,9 @@ namespace ExpressionKit
     /// <returns>
     /// A collection.
     /// </returns>
+    /// <remarks>
+    /// Can be useful for anonymously typed objects.
+    /// </remarks>
     public static IQueryable<TResult> UnwrappedSelect<TSource, TResult>(
       this IQueryable<TSource> source,
       Expression<Func<TSource, TResult>> expression)
@@ -142,6 +142,9 @@ namespace ExpressionKit
     /// <returns>
     /// A collection.
     /// </returns>
+    /// <remarks>
+    /// Can be useful for anonymously typed objects.
+    /// </remarks>
     public static IQueryable<TSource> UnwrappedWhere<TSource>(
       this IQueryable<TSource> source,
       Expression<Func<TSource, bool>> filter)
@@ -150,9 +153,8 @@ namespace ExpressionKit
     }
 
     /// <summary>
-    /// Unwraps any <see cref="MethodCallExpression"/>
-    /// expressions that have <see cref="UnwrappableMethodAttribute"/>
-    /// applied to them.
+    /// Unwraps any <see cref="Expand"/> calls
+    /// within the given expression.
     /// </summary>
     /// <typeparam name="TParam1">
     /// The first parameter type.
@@ -178,8 +180,7 @@ namespace ExpressionKit
     }
 
     /// <summary>
-    /// Helper for creating an expression that simply
-    /// returns false.
+    /// An expression that simply returns false.
     /// </summary>
     /// <typeparam name="TParam">
     /// The type of the parameter.
@@ -193,8 +194,7 @@ namespace ExpressionKit
     }
 
     /// <summary>
-    /// Helper for creating an expression that simply
-    /// returns true.
+    /// An expression that simply returns true.
     /// </summary>
     /// <typeparam name="TParam">
     /// The type of the parameter.
