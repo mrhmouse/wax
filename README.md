@@ -1,4 +1,4 @@
-wax
+Wax
 ===
 
-A .NET library of useful functions for manipulation expression trees.
+A .NET library of useful functions for manipulating expression trees.
