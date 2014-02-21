@@ -25,7 +25,7 @@ mcs -o+ -t:library -out:Wax.dll *.cs
 Then, in your code,
 
 ```csharp
-using ExpressionKit;
+using ExpressionKit.Unwrap;
 ```
 
 The Functions
@@ -49,7 +49,7 @@ Example:
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using ExpressionKit;
+using ExpressionKit.Unwrap;
 
 static class MyProgram
 {
@@ -79,7 +79,7 @@ Using `UnwrappedWhere`, our above example becomes:
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using ExpressionKit;
+using ExpressionKit.Unwrap;
 
 static class MyProgram
 {
