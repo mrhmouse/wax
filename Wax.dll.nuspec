@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>Wax</id>
+    <version>0.2.0</version>
+    <authors>mrhmouse</authors>
+    <owners>mrhmouse</owners>
+    <licenseUrl>http://mit-license.org</licenseUrl>
+    <projectUrl>http://mrhmouse.github.io/wax</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Designed to aid in the reuse of Expression trees.</description>
+    <releaseNotes>Changed namespace.</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>Expression Linq Unwrap</tags>
+    <dependencies>
+      <dependency id="Wax" version="0.2.0" />
+    </dependencies>
+  </metadata>
+</package>
