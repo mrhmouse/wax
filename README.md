@@ -75,3 +75,22 @@ UnwrappedSelect
 ---------------
 
 This function is similar to `UnwrappedWhere`. You can probably guess what it does.
+
+Or, And, Inverse
+----------------
+
+These three functions provide basic boolean logic for working with expressions.
+Their functionality doesn't extend far beyond what's offerred by `Expression`,
+but they are provided as extension methods, which I find easier to read.
+
+Any, All
+--------
+
+These two functions are just shorthand for combining lists of expressions with
+`Or` or `And`, respectively.
+
+Expand
+------
+
+This function doesn't do much by itself; it's only used to flag which expressions to
+`Unwrap`. When actually evaluated, it will throw an `InvalidOperationException`.
