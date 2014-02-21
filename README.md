@@ -79,6 +79,7 @@ Using `UnwrappedWhere`, our above example becomes:
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using ExpressionKit;
 
 static class MyProgram
 {
