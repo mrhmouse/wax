@@ -39,6 +39,42 @@ so its main purpose is to allow common expressions to be saved and re-used inste
 verbatim each time. Wax also contains a few other functions that I found useful when
 working with expressions.</p>
 
+<div class="highlight highlight-csharp"><pre><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq.Expressions</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">ExpressionKit.Unwrap</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="k">class</span> <span class="nc">Example</span>
+<span class="p">{</span>
+  <span class="k">static</span> <span class="n">Expression</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;&gt;</span> <span class="n">square</span> <span class="p">=</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="n">x</span><span class="p">;</span>
+  <span class="k">static</span> <span class="n">Expression</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;&gt;</span> <span class="n">squsquare</span> <span class="p">=</span> <span class="n">Wax</span><span class="p">.</span><span class="n">Unwrap</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;(</span>
+    <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">square</span><span class="p">.</span><span class="n">Expand</span><span class="p">(</span><span class="n">square</span><span class="p">.</span><span class="n">Expand</span><span class="p">(</span><span class="n">x</span><span class="p">)));</span>
+  <span class="k">static</span> <span class="n">Expression</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;&gt;</span> <span class="n">cube</span> <span class="p">=</span> <span class="n">Wax</span><span class="p">.</span><span class="n">Unwrap</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;(</span>
+    <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">squsquare</span><span class="p">.</span><span class="n">Expand</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">/</span> <span class="n">x</span><span class="p">);</span>
+  <span class="k">static</span> <span class="n">Expression</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;&gt;</span> <span class="n">foo</span> <span class="p">=</span> <span class="n">Wax</span><span class="p">.</span><span class="n">Unwrap</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;(</span>
+    <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">cube</span><span class="p">.</span><span class="n">Expand</span><span class="p">(</span><span class="n">x</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="n">square</span><span class="p">.</span><span class="n">Expand</span><span class="p">(</span><span class="n">x</span> <span class="p">-</span> <span class="m">1</span><span class="p">));</span>
+
+  <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
+  <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">expressions</span> <span class="p">=</span> <span class="k">new</span><span class="p">[]</span>
+    <span class="p">{</span>
+      <span class="n">square</span><span class="p">,</span>
+      <span class="n">squsquare</span><span class="p">,</span>
+      <span class="n">cube</span><span class="p">,</span>
+      <span class="n">foo</span>
+    <span class="p">};</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">expression</span> <span class="k">in</span> <span class="n">expressions</span><span class="p">)</span>
+      <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">expression</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="highlight highlight-sh"><pre><span class="nv">x</span> <span class="o">=</span>&gt; <span class="o">(</span>x * x<span class="o">)</span>
+<span class="nv">x</span> <span class="o">=</span>&gt; <span class="o">((</span>x * x<span class="o">)</span> * <span class="o">(</span>x * x<span class="o">))</span>
+<span class="nv">x</span> <span class="o">=</span>&gt; <span class="o">(((</span>x * x<span class="o">)</span> * <span class="o">(</span>x * x<span class="o">))</span> / x<span class="o">)</span>
+<span class="nv">x</span> <span class="o">=</span>&gt; <span class="o">(((((</span>x + 1<span class="o">)</span> * <span class="o">(</span>x + 1<span class="o">))</span> * <span class="o">((</span>x + 1<span class="o">)</span> * <span class="o">(</span>x + 1<span class="o">)))</span> / <span class="o">(</span>x + 1<span class="o">))</span> * <span class="o">((</span>x - 1<span class="o">)</span> * <span class="o">(</span>x - 1<span class="o">)))</span>
+</pre></div>
+
 <h1>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
 
