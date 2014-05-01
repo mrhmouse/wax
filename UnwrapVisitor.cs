@@ -58,6 +58,8 @@ namespace ExpressionKit.Unwrap
       // is the expression to unwrap into.
       var expression = (node.Arguments[0] as MemberExpression);
 
+      if (expression == null) return base.VisitMethodCall(node);
+
       // The owning object that holds our method.
       object constant;
 
