@@ -4,7 +4,7 @@
     <id>Wax</id>
     <title>Wax</title>
     <summary>Allows you to "unwrap" expression trees, which can help other libraries such as Entity Framework better understand them.</summary>
-    <version>0.2.3</version>
+    <version>0.2.4</version>
     <authors>Jordan Brown</authors>
     <owners>mrhmouse</owners>
     <licenseUrl>http://mit-license.org</licenseUrl>
