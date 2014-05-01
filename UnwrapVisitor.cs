@@ -76,10 +76,12 @@ namespace ExpressionKit.Unwrap
       var field = expression.Member as FieldInfo;
       var property = expression.Member as PropertyInfo;
 
-      if (field == null)
+      if (property != null)
         lambda = property.GetValue(constant) as LambdaExpression;
-      else
+      else if (field != null)
         lambda = field.GetValue(constant) as LambdaExpression;
+      else
+        return base.VisitMethodCall(node);
 
       var replacements = new Dictionary<ParameterExpression, Expression>();
 
