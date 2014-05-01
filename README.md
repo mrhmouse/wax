@@ -6,6 +6,44 @@ so its main purpose is to allow common expressions to be saved and re-used inste
 verbatim each time. Wax also contains a few other functions that I found useful when
 working with expressions.
 
+```csharp
+using System;
+using System.Linq.Expressions;
+using ExpressionKit.Unwrap;
+
+static class Example
+{
+  static Expression<Func<int, int>> square = x => x * x;
+  static Expression<Func<int, int>> squsquare = Wax.Unwrap<int, int>(
+    x => square.Expand(square.Expand(x)));
+  static Expression<Func<int, int>> cube = Wax.Unwrap<int, int>(
+    x => squsquare.Expand(x) / x);
+  static Expression<Func<int, int>> foo = Wax.Unwrap<int, int>(
+    x => cube.Expand(x + 1) * square.Expand(x - 1));
+
+  static void Main()
+  {
+    var expressions = new[]
+    {
+      square,
+      squsquare,
+      cube,
+      foo
+    };
+
+    foreach (var expression in expressions)
+      Console.WriteLine(expression);
+  }
+}
+```
+
+```sh
+x => (x * x)
+x => ((x * x) * (x * x))
+x => (((x * x) * (x * x)) / x)
+x => (((((x + 1) * (x + 1)) * ((x + 1) * (x + 1))) / (x + 1)) * ((x - 1) * (x - 1)))
+```
+
 Installation
 ============
 
@@ -25,7 +63,7 @@ mcs -o+ -t:library -out:Wax.dll *.cs
 Then, in your code,
 
 ```csharp
-using ExpressionKit;
+using ExpressionKit.Unwrap;
 ```
 
 The Functions
@@ -49,7 +87,7 @@ Example:
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using ExpressionKit;
+using ExpressionKit.Unwrap;
 
 static class MyProgram
 {
@@ -79,7 +117,7 @@ Using `UnwrappedWhere`, our above example becomes:
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using ExpressionKit;
+using ExpressionKit.Unwrap;
 
 static class MyProgram
 {
