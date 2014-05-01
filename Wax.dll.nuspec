@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>Wax</id>
-    <version>0.2.2</version>
+    <version>0.2.3</version>
     <authors>mrhmouse</authors>
     <owners>mrhmouse</owners>
     <licenseUrl>http://mit-license.org</licenseUrl>
     <projectUrl>http://mrhmouse.github.io/wax</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>Designed to aid in the reuse of Expression trees.</description>
-    <releaseNotes>Prevent null reference in some code.</releaseNotes>
+    <releaseNotes>Deal with uninitialized members.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>Expression Linq Unwrap</tags>
   </metadata>
