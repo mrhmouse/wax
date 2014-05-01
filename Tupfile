@@ -1,0 +1,1 @@
+: *.cs |> mcs -o+ -t:library -out:%o %f |> Wax.dll
