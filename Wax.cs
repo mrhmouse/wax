@@ -4,6 +4,9 @@ namespace ExpressionKit.Unwrap
   using System.Linq;
   using System.Linq.Expressions;
 
+  /// <summary>
+  /// Extensions for runtime expansion of expressions.
+  /// </summary>
   public static class Wax
   {
     /// <summary>
@@ -74,7 +77,8 @@ namespace ExpressionKit.Unwrap
     }
 
     /// <summary>
-    /// Unwraps any <see cref="Expand"/> calls
+    /// Unwraps any <see cref="Expand{TParameter, TResult}(Expression{Func{TParameter, TResult}}, TParameter)"/>
+    /// calls
     /// within the given expression.
     /// </summary>
     /// <typeparam name="TParam">
@@ -98,8 +102,9 @@ namespace ExpressionKit.Unwrap
     }
 
     /// <summary>
-    /// Combines a call to <see cref="Unwrap"/> with a
-    /// call to <see cref="Select"/>.
+    /// Combines a call to <see cref="Unwrap{TParam, TResult}(Expression{Func{TParam, TResult}})"/>
+    /// with a call to
+    /// <see cref="System.Linq.Queryable.Select{TSource, TResult}(IQueryable{TSource}, Expression{Func{TSource, TResult}})"/>.
     /// </summary>
     /// <typeparam name="TSource">
     /// The type of the source of elements.
@@ -127,8 +132,9 @@ namespace ExpressionKit.Unwrap
     }
 
     /// <summary>
-    /// Combines a call to <see cref="Unwrap"/> with a
-    /// call to <see cref="Where"/>.
+    /// Combines a call to <see cref="Unwrap{TParam, TResult}(Expression{Func{TParam, TResult}})"/>
+    /// with a call to
+    /// <see cref="System.Linq.Queryable.Where{TSource}(IQueryable{TSource}, Expression{Func{TSource, Boolean}})"/>.
     /// </summary>
     /// <typeparam name="TSource">
     /// The type of the source of elements.
@@ -153,7 +159,8 @@ namespace ExpressionKit.Unwrap
     }
 
     /// <summary>
-    /// Unwraps any <see cref="Expand"/> calls
+    /// Unwraps any <see cref="Expand{TParameter, TResult}(Expression{Func{TParameter, TResult}}, TParameter)"/>
+    /// calls
     /// within the given expression.
     /// </summary>
     /// <typeparam name="TParam1">
@@ -162,7 +169,7 @@ namespace ExpressionKit.Unwrap
     /// <typeparam name="TParam2">
     /// The second parameter type.
     /// </typeparam>
-    /// <typeparam name="TResult">
+    /// <typeparam name="TValue">
     /// The return type of the expression.
     /// </typeparam>
     /// <param name="expression">

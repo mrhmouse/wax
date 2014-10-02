@@ -7,7 +7,7 @@ namespace ExpressionKit.Unwrap
   using System.Reflection;
 
   /// <summary>
-  /// Unwraps calls to <seealso cref="Wax.Expand"/>
+  /// Unwraps calls to <see cref="Wax.Expand{TParameter, TResult}(Expression{Func{TParameter, TResult}}, TParameter)"/>
   /// into the definition of the expression they call.
   /// </summary>
   internal class UnwrapVisitor : ExpressionVisitor
