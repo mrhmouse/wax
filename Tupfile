@@ -1,1 +1,1 @@
-: *.cs |> mcs -o+ -t:library -out:%o %f |> Wax.dll
+: *.cs |> mcs -doc:Wax.xml -o+ -t:library -out:Wax.dll %f |> Wax.xml | Wax.dll
