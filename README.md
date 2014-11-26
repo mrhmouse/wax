@@ -1,10 +1,11 @@
 Wax
 ===
 
-Wax grew out of my frustration with Linq-to-SQL's inability to handle `InvocationExpression`s,
-so its main purpose is to allow common expressions to be saved and re-used instead of repeated
-verbatim each time. Wax also contains a few other functions that I found useful when
-working with expressions.
+Wax grew out of my frustration with Linq-to-SQL's inability to
+handle `InvocationExpression`s, so its main purpose is to allow
+common expressions to be saved and re-used instead of repeated
+verbatim each time. Wax also contains a few other functions that
+I found useful when working with expressions.
 
 ```csharp
 using System;
@@ -13,22 +14,25 @@ using ExpressionKit.Unwrap;
 
 static class Example
 {
-  static Expression<Func<int, int>> square = x => x * x;
-  static Expression<Func<int, int>> squsquare = Wax.Unwrap<int, int>(
-    x => square.Expand(square.Expand(x)));
-  static Expression<Func<int, int>> cube = Wax.Unwrap<int, int>(
-    x => squsquare.Expand(x) / x);
-  static Expression<Func<int, int>> foo = Wax.Unwrap<int, int>(
-    x => cube.Expand(x + 1) * square.Expand(x - 1));
+  static Expression<Func<int, int>> Square = x => x * x;
+
+  static Expression<Func<int, int>> SquSquare = Wax.Unwrap<int, int>(
+    x => Square.Expand(square.Expand(x)));
+
+  static Expression<Func<int, int>> Cube = Wax.Unwrap<int, int>(
+    x => SquSquare.Expand(x) / x);
+
+  static Expression<Func<int, int>> Foo = Wax.Unwrap<int, int>(
+    x => Cube.Expand(x + 1) * Square.Expand(x - 1));
 
   static void Main()
   {
     var expressions = new[]
     {
-      square,
-      squsquare,
-      cube,
-      foo
+      Square,
+      SquSquare,
+      Cube,
+      Foo
     };
 
     foreach (var expression in expressions)
@@ -72,14 +76,18 @@ The Functions
 Unwrap
 ------
 
-This is the heart of Wax. It's used to unwrap other expressions into their definitions for you,
-so that Linq-to-SQL (or perhaps other frameworks that expect simple expressions) can digest them.
+This is the heart of Wax.
+It's used to unwrap other expressions into their definitions for you,
+so that Linq-to-SQL (or perhaps other frameworks that expect simple
+expressions) can digest them.
 
-There are two variations of `Unwrap`: one for functions receiving a single argument,
-and another for functions receiving two arguments. In practice, I haven't needed more than this,
-but I may extend these to the full length offered by `Func<T...>` in the future.
+There are two variations of `Unwrap`: one for functions receiving a
+single argument, and another for functions receiving two arguments.
+In practice, I haven't needed more than this, but I may extend these
+to the full length offered by `Func<T...>` in the future.
 
-Expressions are marked for unwrapping using `Expand`, which also has two variants.
+Expressions are marked for unwrapping using `Expand`, which also
+has two variants.
 
 Example:
 
@@ -96,21 +104,24 @@ static class MyProgram
     
   static void Main()
   {
-    var red = MyContext.MyModels.Where(Wax.Unwrap<MyModel, bool>(m => ModelProperties
-      .Expand(m)
-      .Any(p => p.Color == Colors.Red)));
+    var red = MyContext.MyModels
+      .Where(Wax.Unwrap<MyModel, bool>(m => ModelProperties
+        .Expand(m)
+        .Any(p => p.Color == Colors.Red)));
   }
 }
 ```
 
-Of course, having to explicitly state the type parameters for `Unwrap` every time can be irritating, and
-it is impossible when one of the type parameters refers to an anonymous type.
+Of course, having to explicitly state the type parameters
+for `Unwrap` every time can be irritating, and it is
+impossible when one of the type parameters refers to an anonymous type.
 Which is why Wax also provides...
 
 UnwrappedWhere
 --------------
 
-This function is just Linq's `Where` combined with `Unwrap` to give you the convenience of type inference.
+This function is just Linq's `Where` combined with `Unwrap`
+to give you the convenience of type inference.
 Using `UnwrappedWhere`, our above example becomes:
 
 ```csharp
@@ -126,9 +137,10 @@ static class MyProgram
     
   static void Main()
   {
-    var red = MyContext.MyModels.UnwrappedWhere(m => ModelProperties
-      .Expand(m)
-      .Any(p => p.Color == Colors.Red)));
+    var red = MyContext.MyModels
+      .UnwrappedWhere(m => ModelProperties
+        .Expand(m)
+        .Any(p => p.Color == Colors.Red)));
   }
 }
 ```
@@ -136,7 +148,8 @@ static class MyProgram
 UnwrappedSelect
 ---------------
 
-This function is similar to `UnwrappedWhere`. You can probably guess what it does.
+This function is similar to `UnwrappedWhere`.
+You can probably guess what it does.
 
 Or, And, Inverse
 ----------------
@@ -154,5 +167,6 @@ These two functions are just shorthand for combining lists of expressions with
 Expand
 ------
 
-This function doesn't do much by itself; it's only used to flag which expressions to
-`Unwrap`. When actually evaluated, it will throw an `InvalidOperationException`.
+This function doesn't do much by itself; it's only used to flag
+which expressions to `Unwrap`. When actually evaluated, it will
+throw an `InvalidOperationException`.
