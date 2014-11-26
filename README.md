@@ -17,7 +17,7 @@ static class Example
   static Expression<Func<int, int>> Square = x => x * x;
 
   static Expression<Func<int, int>> SquSquare = Wax.Unwrap<int, int>(
-    x => Square.Expand(square.Expand(x)));
+    x => Square.Expand(Square.Expand(x)));
 
   static Expression<Func<int, int>> Cube = Wax.Unwrap<int, int>(
     x => SquSquare.Expand(x) / x);
