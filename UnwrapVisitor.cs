@@ -66,10 +66,15 @@ namespace ExpressionKit.Unwrap
       var e = expression.Expression;
       var member = expression.Member;
 
-      // Dig down to the underlying
-      // constant value of the expression
-      while (true)
+      if (e == null)
       {
+        // This is a static field or property
+        constant = member.ReflectedType;
+      }
+      else while (true)
+      {
+        // Dig down to the underlying
+        // constant value of the expression
         if (e is ConstantExpression)
         {
           constant = (e as ConstantExpression).Value;
