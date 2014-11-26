@@ -63,18 +63,40 @@ namespace ExpressionKit.Unwrap
       // The owning object that holds our method.
       object constant;
 
-      // The value of the field of `constant` - our method body.
-      LambdaExpression lambda;
+      var e = expression.Expression;
+      var member = expression.Member;
 
-      if (expression.Expression is ConstantExpression)
-        constant = (expression.Expression as ConstantExpression).Value;
-      else
-        // This is a static member.
-        constant = expression.Member.ReflectedType;
+      // Dig down to the underlying
+      // constant value of the expression
+      while (true)
+      {
+        if (e is ConstantExpression)
+        {
+          constant = (e as ConstantExpression).Value;
+          break;
+        }
+
+        if (e is MemberExpression)
+        {
+          var m = e as MemberExpression;
+          e = m.Expression;
+          member = m.Member;
+          continue;
+        }
+
+        throw new InvalidOperationException(
+          string.Format(
+            "Can't work with expression {0} of type {1}.",
+            e,
+            e.GetType()));
+      }
 
       // The field or property of `constant` that we want.
-      var field = expression.Member as FieldInfo;
-      var property = expression.Member as PropertyInfo;
+      var field = member as FieldInfo;
+      var property = member as PropertyInfo;
+
+      // The value of the field of `constant` - our method body.
+      LambdaExpression lambda;
 
       if (property != null)
         lambda = property.GetValue(constant) as LambdaExpression;
