@@ -4,14 +4,14 @@
     <id>Wax</id>
     <title>Wax</title>
     <summary>Allows you to "unwrap" expression trees, which can help other libraries such as Entity Framework better understand them.</summary>
-    <version>0.2.8</version>
+    <version>0.2.9</version>
     <authors>Jordan Brown</authors>
     <owners>mrhmouse</owners>
     <licenseUrl>http://mit-license.org</licenseUrl>
     <projectUrl>http://mrhmouse.github.io/wax</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>Designed to aid in the reuse of Expression trees.</description>
-    <releaseNotes>Expression inversion made smarter!</releaseNotes>
+    <releaseNotes>Minor change to recursive visitor</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>Expression Linq Unwrap</tags>
   </metadata>
