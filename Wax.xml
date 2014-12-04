@@ -4,6 +4,12 @@
         <name>Wax</name>
     </assembly>
     <members>
+        <member name="T:ExpressionKit.Unwrap.InvertVisitor">
+            <summary>
+            An expression visitor that inverts all
+            logic in an expression tree.
+            </summary>
+        </member>
         <member name="T:ExpressionKit.Unwrap.ReplaceVisitor">
             <summary>
             An expression visitor that acts as a simple find
