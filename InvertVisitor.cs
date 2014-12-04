@@ -21,13 +21,13 @@
       {
         case ExpressionType.AndAlso:
           return Expression.OrElse(
-            new InvertVisitor().Visit(b.Left),
-            new InvertVisitor().Visit(b.Right));
+            this.Visit(b.Left),
+            this.Visit(b.Right));
 
         case ExpressionType.OrElse:
           return Expression.AndAlso(
-            new InvertVisitor().Visit(b.Left),
-            new InvertVisitor().Visit(b.Right));
+            this.Visit(b.Left),
+            this.Visit(b.Right));
 
         case ExpressionType.Equal:
           return Expression.NotEqual(
