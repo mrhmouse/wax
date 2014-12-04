@@ -294,9 +294,10 @@ namespace ExpressionKit.Unwrap
     public static Expression<Func<TParam, bool>> All<TParam>(
       params Expression<Func<TParam, bool>>[] expressions)
     {
-      var head = True<TParam>();
+      var head = expressions.First();
+      var tail = expressions.Skip(1);
 
-      foreach (var expression in expressions)
+      foreach (var expression in tail)
         head = head.And(expression);
 
       return head;
@@ -317,9 +318,10 @@ namespace ExpressionKit.Unwrap
     public static Expression<Func<TParam, bool>> Any<TParam>(
       params Expression<Func<TParam, bool>>[] expressions)
     {
-      var head = False<TParam>();
+      var head = expressions.First();
+      var tail = expressions.Skip(1);
 
-      foreach (var expression in expressions)
+      foreach (var expression in tail)
         head = head.Or(expression);
 
       return head;
@@ -341,10 +343,7 @@ namespace ExpressionKit.Unwrap
       this Expression<Func<TParam, bool>> predicate)
     {
       return Expression.Lambda<Func<TParam, bool>>(
-        Expression.Condition(
-          predicate.Body,
-          Expression.Constant(false),
-          Expression.Constant(true)),
+        new InvertVisitor().Visit(predicate.Body),
         predicate.Parameters);
     }
   }
