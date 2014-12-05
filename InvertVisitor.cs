@@ -82,21 +82,56 @@
 
     protected override Expression VisitMember(MemberExpression m)
     {
-      Type t;
-      if (m.Member is PropertyInfo)
-      {
-        var p = m.Member as PropertyInfo;
-        t = p.PropertyType;
-      }
-      else if (m.Member is FieldInfo)
-      {
-        var f = m.Member as FieldInfo;
-        t = f.FieldType;
-      }
-      else return m;
+      if (m.Type != typeof(bool))
+        return base.VisitMember(m);
 
-      if (t == typeof(bool)) return Invert(m);
-      else return m;
+      return Invert(m);
+    }
+
+    protected override Expression VisitMethodCall(
+      MethodCallExpression m)
+    {
+      if (m.Type != typeof(bool))
+        return base.VisitMethodCall(m);
+
+      return Invert(m);
+    }
+
+    protected override Expression VisitConditional(
+      ConditionalExpression c)
+    {
+      return Expression.Condition(
+        c.Test,
+        c.IfFalse,
+        c.IfTrue);
+    }
+
+    protected override Expression VisitConstant(
+      ConstantExpression c)
+    {
+      if (c.Type != typeof(bool))
+        return base.VisitConstant(c);
+
+      var val = (bool)c.Value;
+      return Expression.Constant(!val);
+    }
+
+    protected override Expression VisitDefault(
+      DefaultExpression d)
+    {
+      if (d.Type != typeof(bool))
+        return base.VisitDefault(d);
+
+      return Expression.Constant(true);
+    }
+
+    protected override Expression VisitDynamic(
+      DynamicExpression d)
+    {
+      if (d.Type != typeof(bool))
+        return base.VisitDynamic(d);
+
+      return Invert(d);
     }
   }
 }
