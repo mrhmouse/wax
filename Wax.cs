@@ -10,6 +10,26 @@ namespace ExpressionKit.Unwrap
   public static class Wax
   {
     /// <summary>
+    /// Inject a constant directly into the query.
+    /// </summary>
+    /// <typeparam name="TValue">
+    /// The type of the result.
+    /// </typeparam>
+    /// <param name="thunk">
+    /// A thunk that returns the value to inject. It must not rely on
+    /// parameters local to the query.
+    /// </param>
+    /// <returns>
+    /// If this method is executed outside of an expression,
+    /// it will throw an instance of <see cref="NotImplementedException"/>.
+    /// </returns>
+    [ConstantValueMethod]
+    public static TValue Constant<TValue>(this TValue value)
+    {
+      throw new NotImplementedException();
+    }
+
+    /// <summary>
     /// Invoke an expression with a single parameter.
     /// </summary>
     /// <typeparam name="TParameter">
@@ -31,7 +51,7 @@ namespace ExpressionKit.Unwrap
     /// When used in an expression, this call can be unwrapped.
     /// This method should not be used outside of an unwrapped expression.
     /// </remarks>
-    [UnwrappableMethodAttribute]
+    [UnwrappableMethod]
     public static TResult Expand<TParameter, TResult>(
       this Expression<Func<TParameter, TResult>> expression,
       TParameter parameter)
@@ -67,7 +87,7 @@ namespace ExpressionKit.Unwrap
     /// When used in an expression, this call can be unwrapped.
     /// This method should not be used outside of an unwrapped expression.
     /// </remarks>
-    [UnwrappableMethodAttribute]
+    [UnwrappableMethod]
     public static TResult Expand<TParam1, TParam2, TResult>(
       this Expression<Func<TParam1, TParam2, TResult>> expression,
       TParam1 param1,

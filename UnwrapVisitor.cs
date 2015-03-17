@@ -16,7 +16,17 @@ namespace ExpressionKit.Unwrap
 
     private static Type UnwrappableType = typeof(UnwrappableMethodAttribute);
 
-    private static bool MethodMatches(MethodInfo method)
+    private static Type ConstantValueType = typeof(ConstantValueMethodAttribute);
+
+    private static bool MethodIsThunk(MethodInfo method)
+    {
+      return method.DeclaringType == DeclaringType
+        && method.IsPublic
+        && method.CustomAttributes
+          .Any(attr => attr.AttributeType == ConstantValueType);
+    }
+
+    private static bool MethodIsUnwrappable(MethodInfo method)
     {
       return method.DeclaringType == DeclaringType
         && method.IsPublic
@@ -50,15 +60,14 @@ namespace ExpressionKit.Unwrap
         return base.VisitParameter(node);
     }
 
-    protected override Expression VisitMethodCall(MethodCallExpression node)
+    private Expression Unwrap(MethodCallExpression node)
     {
-      if (!MethodMatches(node.Method)) return base.VisitMethodCall(node);
-
       // The first argument of an unwrappable call
       // is the expression to unwrap into.
       var expression = (node.Arguments[0] as MemberExpression);
 
-      if (expression == null) return base.VisitMethodCall(node);
+      if (expression == null)
+        return base.VisitMethodCall(node);
 
       // The owning object that holds our method.
       object constant;
@@ -71,29 +80,32 @@ namespace ExpressionKit.Unwrap
         // This is a static field or property
         constant = member.ReflectedType;
       }
-      else while (true)
+      else
       {
-        // Dig down to the underlying
-        // constant value of the expression
-        if (e is ConstantExpression)
+        while (true)
         {
-          constant = (e as ConstantExpression).Value;
-          break;
-        }
+          // Dig down to the underlying
+          // constant value of the expression
+          if (e is ConstantExpression)
+          {
+            constant = (e as ConstantExpression).Value;
+            break;
+          }
 
-        if (e is MemberExpression)
-        {
-          var m = e as MemberExpression;
-          e = m.Expression;
-          member = m.Member;
-          continue;
-        }
+          if (e is MemberExpression)
+          {
+            var m = e as MemberExpression;
+            e = m.Expression;
+            member = m.Member;
+            continue;
+          }
 
-        throw new InvalidOperationException(
-          string.Format(
-            "Can't work with expression {0} of type {1}.",
-            e,
-            e.GetType()));
+          throw new InvalidOperationException(
+            string.Format(
+              "Can't work with expression {0} of type {1}.",
+              e,
+              e.GetType()));
+        }
       }
 
       // The field or property of `constant` that we want.
@@ -104,12 +116,18 @@ namespace ExpressionKit.Unwrap
       LambdaExpression lambda;
 
       if (property != null)
+      {
         lambda = property.GetValue(constant) as LambdaExpression;
+      }
       else
+      {
         lambda = field.GetValue(constant) as LambdaExpression;
+      }
 
       if (lambda == null)
+      {
         return base.VisitMethodCall(node);
+      }
 
       var replacements = new Dictionary<ParameterExpression, Expression>();
 
@@ -127,6 +145,27 @@ namespace ExpressionKit.Unwrap
       // Allow another visit to replace parameters defined here and
       // to recursively unwrap method calls.
       return new UnwrapVisitor(replacements).Visit(lambda.Body);
+    }
+
+    private Expression Unthunk(MethodCallExpression node)
+    {
+      var lambda = Expression.Lambda(node.Arguments[0]);
+      return Expression.Constant(lambda.Compile().DynamicInvoke());
+    }
+
+    protected override Expression VisitMethodCall(MethodCallExpression node)
+    {
+      if (MethodIsUnwrappable(node.Method))
+      {
+        return this.Unwrap(node);
+      }
+
+      if (MethodIsThunk(node.Method))
+      {
+        return this.Unthunk(node);
+      }
+
+      return base.VisitMethodCall(node);
     }
   }
 }
