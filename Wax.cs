@@ -15,8 +15,8 @@ namespace ExpressionKit.Unwrap
     /// <typeparam name="TValue">
     /// The type of the result.
     /// </typeparam>
-    /// <param name="thunk">
-    /// A thunk that returns the value to inject. It must not rely on
+    /// <param name="value">
+    /// The value to inject. It must not rely on
     /// parameters local to the query.
     /// </param>
     /// <returns>
